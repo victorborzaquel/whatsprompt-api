@@ -1,6 +1,13 @@
 gpt:
   api-key: ${GPT_KEY}
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/whatsprompt
