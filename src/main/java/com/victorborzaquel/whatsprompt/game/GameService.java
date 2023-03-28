@@ -6,6 +6,8 @@ import com.theokanning.openai.service.OpenAiService;
 import com.victorborzaquel.whatsprompt.Languages;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameResponse;
+import com.victorborzaquel.whatsprompt.exceptions.GameCompletedException;
+import com.victorborzaquel.whatsprompt.exceptions.GameNotFoundException;
 import com.victorborzaquel.whatsprompt.utils.ScoreUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class GameService {
         }
 
         public Game findById(UUID id) {
-                return repository.findById(id).orElseThrow(() -> new RuntimeException("Game not found!"));
+                return repository.findById(id).orElseThrow(GameNotFoundException::new);
         }
 
         public CreateGameResponse createGame(Languages language, String nickname) {
@@ -51,7 +53,7 @@ public class GameService {
                 Game game = findById(gameId);
 
                 if (game.getUserAnswer() != null) {
-                        throw new RuntimeException("Game already completed!");
+                        throw new GameCompletedException();
                 }
 
                 game.setUserAnswer(answer);
