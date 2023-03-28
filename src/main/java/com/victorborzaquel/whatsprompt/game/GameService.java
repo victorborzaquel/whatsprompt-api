@@ -3,7 +3,7 @@ package com.victorborzaquel.whatsprompt.game;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.image.CreateImageRequest;
 import com.theokanning.openai.service.OpenAiService;
-import com.victorborzaquel.whatsprompt.Languages;
+import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameResponse;
 import com.victorborzaquel.whatsprompt.exceptions.GameCompletedException;

@@ -1,6 +1,6 @@
 package com.victorborzaquel.whatsprompt.game;
 
-import com.victorborzaquel.whatsprompt.Languages;
+import com.victorborzaquel.whatsprompt.enums.Languages;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

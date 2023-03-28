@@ -1,6 +1,6 @@
 package com.victorborzaquel.whatsprompt.api.controllers;
 
-import com.victorborzaquel.whatsprompt.Languages;
+import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameRequest;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameRequest;
