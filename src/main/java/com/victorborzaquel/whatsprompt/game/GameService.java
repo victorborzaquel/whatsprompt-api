@@ -3,16 +3,17 @@ package com.victorborzaquel.whatsprompt.game;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.image.CreateImageRequest;
 import com.theokanning.openai.service.OpenAiService;
-import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameResponse;
+import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.exceptions.GameCompletedException;
 import com.victorborzaquel.whatsprompt.exceptions.GameNotFoundException;
 import com.victorborzaquel.whatsprompt.utils.ScoreUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,8 +22,8 @@ public class GameService {
         private final GameRepository repository;
         private final OpenAiService openAiService;
 
-        public List<Game> getRanking() {
-                return repository.findAllByOrderByScoreDesc();
+        public Page<Game> getRanking(Pageable pageable) {
+                return repository.findAllByOrderByScoreDesc(pageable);
         }
 
         public Game findById(UUID id) {

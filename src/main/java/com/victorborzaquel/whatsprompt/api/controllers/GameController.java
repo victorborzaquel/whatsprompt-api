@@ -1,16 +1,17 @@
 package com.victorborzaquel.whatsprompt.api.controllers;
 
-import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameRequest;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameRequest;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameResponse;
+import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.game.Game;
 import com.victorborzaquel.whatsprompt.game.GameService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +36,12 @@ public class GameController {
     }
 
     @GetMapping("/ranking")
-    public List<Game> ranking() {
-        return service.getRanking();
+    public Page<Game> ranking(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "100") int size
+    ) {
+        Pageable pageable = PageRequest.ofSize(size).withPage(page);
+
+        return service.getRanking(pageable);
     }
 }
