@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -22,8 +23,8 @@ public class GameService {
         private final GameRepository repository;
         private final OpenAiService openAiService;
 
-        public Page<Game> getRanking(Pageable pageable) {
-                return repository.findAllByOrderByScoreDesc(pageable);
+        public Page<Game> getRanking(Pageable pageable, Languages language, LocalDate greaterThanDate) {
+                return repository.findAllByRanking(pageable, language, greaterThanDate);
         }
 
         public Game findById(UUID id) {

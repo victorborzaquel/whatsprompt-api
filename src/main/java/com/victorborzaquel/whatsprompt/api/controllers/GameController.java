@@ -4,6 +4,7 @@ import com.victorborzaquel.whatsprompt.api.dto.CompleteGameRequest;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameRequest;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameResponse;
+import com.victorborzaquel.whatsprompt.enums.FilterDates;
 import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.game.Game;
 import com.victorborzaquel.whatsprompt.game.GameService;
@@ -38,10 +39,12 @@ public class GameController {
     @GetMapping("/ranking")
     public Page<Game> ranking(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "100") int size
+            @RequestParam(value = "size", defaultValue = "25") int size,
+            @RequestParam(value = "language", required = false) Languages language,
+            @RequestParam(value = "date", defaultValue = "ALL") FilterDates date
     ) {
         Pageable pageable = PageRequest.ofSize(size).withPage(page);
 
-        return service.getRanking(pageable);
+        return service.getRanking(pageable, language, date.getDate());
     }
 }
