@@ -9,6 +9,8 @@ springdoc:
     operations-sorter: method
 
 spring:
+  profiles:
+    active: ${SPRING_PROFILE}
   datasource:
     url: jdbc:postgresql://localhost:5432/whatsprompt
     username: root

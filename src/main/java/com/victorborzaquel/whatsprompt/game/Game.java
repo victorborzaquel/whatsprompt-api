@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Game {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     private UUID id;
     @NotBlank
     private String userNickName;
