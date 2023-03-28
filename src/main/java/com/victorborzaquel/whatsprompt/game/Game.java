@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -31,6 +31,7 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private Languages language;
     @Builder.Default
-    private LocalDate createdAt = LocalDate.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime completedAt;
     private Integer score;
 }

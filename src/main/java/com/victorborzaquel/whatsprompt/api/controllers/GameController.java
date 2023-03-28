@@ -1,17 +1,14 @@
 package com.victorborzaquel.whatsprompt.api.controllers;
 
-import com.victorborzaquel.whatsprompt.api.dto.CompleteGameRequest;
-import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
-import com.victorborzaquel.whatsprompt.api.dto.CreateGameRequest;
-import com.victorborzaquel.whatsprompt.api.dto.CreateGameResponse;
+import com.victorborzaquel.whatsprompt.api.dto.*;
 import com.victorborzaquel.whatsprompt.enums.FilterDates;
 import com.victorborzaquel.whatsprompt.enums.Languages;
-import com.victorborzaquel.whatsprompt.game.Game;
 import com.victorborzaquel.whatsprompt.game.GameService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,7 +34,7 @@ public class GameController {
     }
 
     @GetMapping("/ranking")
-    public Page<Game> ranking(
+    public PagedModel<EntityModel<RankingResponse>> ranking(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "25") int size,
             @RequestParam(value = "language", required = false) Languages language,
@@ -45,6 +42,6 @@ public class GameController {
     ) {
         Pageable pageable = PageRequest.ofSize(size).withPage(page);
 
-        return service.getRanking(pageable, language, date.getDate());
+        return service.getRanking(pageable, language, date);
     }
 }

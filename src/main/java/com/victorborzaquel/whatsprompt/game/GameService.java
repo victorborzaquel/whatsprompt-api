@@ -3,8 +3,11 @@ package com.victorborzaquel.whatsprompt.game;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.image.CreateImageRequest;
 import com.theokanning.openai.service.OpenAiService;
+import com.victorborzaquel.whatsprompt.api.controllers.GameController;
 import com.victorborzaquel.whatsprompt.api.dto.CompleteGameResponse;
 import com.victorborzaquel.whatsprompt.api.dto.CreateGameResponse;
+import com.victorborzaquel.whatsprompt.api.dto.RankingResponse;
+import com.victorborzaquel.whatsprompt.enums.FilterDates;
 import com.victorborzaquel.whatsprompt.enums.Languages;
 import com.victorborzaquel.whatsprompt.exceptions.GameCompletedException;
 import com.victorborzaquel.whatsprompt.exceptions.GameNotFoundException;
@@ -12,19 +15,33 @@ import com.victorborzaquel.whatsprompt.utils.ScoreUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
 public class GameService {
         private final GameRepository repository;
         private final OpenAiService openAiService;
+        private final PagedResourcesAssembler<RankingResponse> assembler;
 
-        public Page<Game> getRanking(Pageable pageable, Languages language, LocalDate greaterThanDate) {
-                return repository.findAllByRanking(pageable, language, greaterThanDate);
+        public PagedModel<EntityModel<RankingResponse>> getRanking(Pageable pageable, Languages language, FilterDates date) {
+                Page<Game> pageGame = repository.findAllByRanking(pageable, language, date.getDate());
+                Page<RankingResponse> pageResponse = pageGame.map(RankingResponse::fromGame);
+
+                PagedModel<EntityModel<RankingResponse>> pageModel = methodOn(GameController.class).ranking(pageable.getPageNumber(), pageable.getPageSize(), language, date);
+                Link link = linkTo(pageModel).withSelfRel();
+
+                return assembler.toModel(pageResponse, link);
         }
 
         public Game findById(UUID id) {
@@ -54,12 +71,15 @@ public class GameService {
         public CompleteGameResponse completeGame(UUID gameId, String answer) {
                 Game game = findById(gameId);
 
-                if (game.getUserAnswer() != null) {
+                if (game.getUserAnswer() != null || game.getCompletedAt() != null) {
                         throw new GameCompletedException();
                 }
 
+                final int score = ScoreUtils.generateScore(game.getCorrectAnswer(), answer);
+
                 game.setUserAnswer(answer);
-                game.setScore(ScoreUtils.generateScore(game.getCorrectAnswer(), game.getUserAnswer()));
+                game.setScore(score);
+                game.setCompletedAt(LocalDateTime.now());
 
                 repository.save(game);
 
