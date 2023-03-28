@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class GameController {
 
     private final GameService service;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create")
     public CreateGameResponse createGame(
             @RequestParam Languages language,
@@ -26,6 +28,7 @@ public class GameController {
         return service.createGame(language, request.getNickname());
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/complete")
     public CompleteGameResponse completeGame(
             @RequestBody CompleteGameRequest request
@@ -33,6 +36,7 @@ public class GameController {
         return service.completeGame(request.getGameId(), request.getAnswer());
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/ranking")
     public PagedModel<EntityModel<RankingResponse>> ranking(
             @RequestParam(value = "page", defaultValue = "0") int page,
