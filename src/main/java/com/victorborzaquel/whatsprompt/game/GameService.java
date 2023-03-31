@@ -106,6 +106,7 @@ public class GameService {
                 CompletionRequest completionRequest = CompletionRequest.builder()
                         .prompt(prompt)
                         .model("text-davinci-003")
+//                        .temperature(1.5)
                         .maxTokens(100)
                         .build();
 

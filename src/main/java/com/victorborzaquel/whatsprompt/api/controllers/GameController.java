@@ -29,7 +29,7 @@ public class GameController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/complete")
+    @PostMapping("/answer")
     public CompleteGameResponse completeGame(
             @RequestBody CompleteGameRequest request
     ) {
@@ -42,7 +42,7 @@ public class GameController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "25") int size,
             @RequestParam(value = "language", required = false) Languages language,
-            @RequestParam(value = "date", defaultValue = "ALL") FilterDates date
+            @RequestParam(value = "date", defaultValue = "ALL_TIME") FilterDates date
     ) {
         Pageable pageable = PageRequest.ofSize(size).withPage(page);
 
